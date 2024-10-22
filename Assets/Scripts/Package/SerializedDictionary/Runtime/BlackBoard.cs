@@ -12,50 +12,24 @@ namespace sim2kid.Package.SerializedDictionary.Runtime
     [Serializable]
     public class Blackboard : Dictionary<string, object>, ISerializationCallbackReceiver
     {
-        [Serializable]
-        //struct represents the string key, and the serialized value from the dictionary.
-        private struct SaveItem
-        {
-            public string key;
-            public string value;
-            public int index;
-
-            public SaveItem(string key, string val, int index)
-            {
-                this.key = key;
-                this.value = val;
-                this.index = index;
-            }
-        }
-
-        //All serialized items except for objects in a scene, which have to be handled separately.
+        /// <summary>
+        /// Holds all serialized items in the dictionary.
+        /// </summary>
         [SerializeField, HideInInspector]
-        private List<SaveItem> saveItems;
-
-        //We need a different struct and list for Object references in scene :(
-        [Serializable]
-        private struct NonAssetSaveItem
-        {
-            public string key;
-            public UnityEngine.Object obj;
-            public int index;
-
-            public NonAssetSaveItem(string key, UnityEngine.Object obj, int index)
-            {
-                this.key = key;
-                this.obj = obj;
-                this.index = index;
-            }
-        }
+        protected List<SaveItem> saveItems;
+        
+        /// <summary>
+        /// Holds all Unity Objects in the dictionary.
+        /// </summary>
         [SerializeField, HideInInspector]
-        private List<NonAssetSaveItem> sceneObjectSaveItems;
-
+        protected List<UnitySaveItem> sceneObjectSaveItems;
+        
         /// <summary>
         /// Takes all of the keyvalue pairs from the Dictionary and stores them as Serializable lists.
         /// </summary>
         public void OnBeforeSerialize()
         {
-            sceneObjectSaveItems = new List<NonAssetSaveItem>();
+            sceneObjectSaveItems = new List<UnitySaveItem>();
             saveItems = new List<SaveItem>();
             List<string> keys = this.Keys.ToList();
             List<object> values = this.Values.ToList();
@@ -105,7 +79,7 @@ namespace sim2kid.Package.SerializedDictionary.Runtime
                         }
                         else
                         {
-                            sceneObjectSaveItems.Add(new NonAssetSaveItem(keys[i], obj, i));
+                            sceneObjectSaveItems.Add(new UnitySaveItem(keys[i], obj, i));
                         }
                         break;
                     //Try to serialize to JSON. May be empty if type is not supported
@@ -130,7 +104,7 @@ namespace sim2kid.Package.SerializedDictionary.Runtime
 
             //Ensure that the lists are not null to ensure no errors when accessing list.Count
             saveItems = saveItems == null ? new List<SaveItem>() : saveItems;
-            sceneObjectSaveItems = sceneObjectSaveItems == null ? new List<NonAssetSaveItem>() : sceneObjectSaveItems;
+            sceneObjectSaveItems = sceneObjectSaveItems == null ? new List<UnitySaveItem>() : sceneObjectSaveItems;
 
             while (i < saveItems.Count && j < sceneObjectSaveItems.Count)
             {
@@ -227,6 +201,46 @@ namespace sim2kid.Package.SerializedDictionary.Runtime
                 this.Add(key, ob);
             }
         }
+        
+        #region Save Item Structs
+
+        /// <summary>
+        /// This struct represents the string key, and the serialized value from the dictionary.
+        /// </summary>
+        [Serializable]
+        protected struct SaveItem
+        {
+            public string key;
+            public string value;
+            public int index;
+
+            public SaveItem(string key, string value, int index)
+            {
+                this.key = key;
+                this.value = value;
+                this.index = index;
+            }
+        }
+        
+        /// <summary>
+        /// This struct represents the string key and Unity Objects from the dictionary.
+        /// </summary>
+        [Serializable]
+        protected struct UnitySaveItem
+        {
+            public string key;
+            public UnityEngine.Object obj;
+            public int index;
+
+            public UnitySaveItem(string key, UnityEngine.Object obj, int index)
+            {
+                this.key = key;
+                this.obj = obj;
+                this.index = index;
+            }
+        }
+
+        #endregion
 
         [System.Serializable]
         private static class Serializer
