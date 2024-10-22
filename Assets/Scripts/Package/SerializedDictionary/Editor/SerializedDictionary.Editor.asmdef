@@ -1,0 +1,18 @@
+{
+    "name": "SerializedDictionary.Editor",
+    "rootNamespace": "sim2kid",
+    "references": [
+        "GUID:63425379f6089c94981c4117117f3ac3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

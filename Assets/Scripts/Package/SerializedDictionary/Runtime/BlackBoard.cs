@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-namespace sim2kid.Package.SerializedDictionary
+namespace sim2kid.Package.SerializedDictionary.Runtime
 {
     [Serializable]
     public class Blackboard : Dictionary<string, object>, ISerializationCallbackReceiver

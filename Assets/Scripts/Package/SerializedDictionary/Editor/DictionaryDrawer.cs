@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using sim2kid.Package.SerializedDictionary.Runtime;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace sim2kid.Package.SerializedDictionary
+namespace sim2kid.Package.SerializedDictionary.Editor
 {
     public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
     {
