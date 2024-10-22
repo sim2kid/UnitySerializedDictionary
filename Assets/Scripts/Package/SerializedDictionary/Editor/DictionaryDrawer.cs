@@ -388,10 +388,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
         {
             try
             {
-                Debug.Log($"{targetObject == null} || {_Dictionary == null}");
                 if (targetObject == null || _Dictionary == null) return; // If the target object or dictionary is null, return. Something isn't intialized properly.
-                
-                Debug.Log("Marking dirty");
             
                 // Marks the target object as dirty. This will update scenes and prefabs.
                 EditorUtility.SetDirty(targetObject); 
@@ -400,7 +397,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
             }
             catch (Exception e)
             {
-                Debug.Log(e.Message);
+                Debug.LogException(e);
             }
         }
 
