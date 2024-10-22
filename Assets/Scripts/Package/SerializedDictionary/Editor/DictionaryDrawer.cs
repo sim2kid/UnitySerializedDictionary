@@ -7,6 +7,11 @@ using Object = UnityEngine.Object;
 
 namespace sim2kid.Package.SerializedDictionary.Editor
 {
+    /// <summary>
+    /// DictionaryDrawer is an abstract class that provides custom drawing functionality for dictionary properties in the Unity Editor.
+    /// </summary>
+    /// <typeparam name="TK">The type of the dictionary keys.</typeparam>
+    /// <typeparam name="TV">The type of the dictionary values.</typeparam>
     public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
     {
         private Dictionary<TK, TV> _Dictionary;
@@ -466,8 +471,4 @@ namespace sim2kid.Package.SerializedDictionary.Editor
             }
         }
     }
-
-
-    [CustomPropertyDrawer(typeof(Blackboard))]
-    public class BlackboardDrawer : DictionaryDrawer<string, object> { }
 }
