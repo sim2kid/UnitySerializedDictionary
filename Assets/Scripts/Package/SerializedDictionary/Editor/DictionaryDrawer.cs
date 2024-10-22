@@ -10,11 +10,11 @@ namespace sim2kid.Package.SerializedDictionary.Editor
     /// <summary>
     /// DictionaryDrawer is an abstract class that provides custom drawing functionality for dictionary properties in the Unity Editor.
     /// </summary>
-    /// <typeparam name="TK">The type of the dictionary keys.</typeparam>
-    /// <typeparam name="TV">The type of the dictionary values.</typeparam>
-    public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
+    /// <typeparam name="TKey">The type of the dictionary keys.</typeparam>
+    /// <typeparam name="TValue">The type of the dictionary values.</typeparam>
+    public abstract class DictionaryDrawer<TKey, TValue> : PropertyDrawer
     {
-        private Dictionary<TK, TV> _Dictionary;
+        private Dictionary<TKey, TValue> _Dictionary;
         // The UnityObject this PropertyDrawer is drawing. It is set in OnGUI and is used in other methods.
         private Object targetObject;
         private bool _Foldout;
@@ -74,7 +74,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
                 keyRect.height -= fieldPadding * 2;
             
                 EditorGUI.BeginChangeCheck();
-                var newKey = DoField(keyRect, typeof(TK), (TK)key);
+                var newKey = DoField(keyRect, typeof(TKey), (TKey)key);
                 if (EditorGUI.EndChangeCheck())
                 {
                     try
@@ -99,7 +99,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
                 valueRect.height -= fieldPadding * 2;
                 valueRect.width = (position.width - keyRect.width) - ((kButtonWidth + 2) * 2f) - valueRect.size.y - (spacing* 2.5f);
                 EditorGUI.BeginChangeCheck();
-                value = DoField(valueRect, typeof(TV), (TV)value);
+                value = DoField(valueRect, typeof(TValue), (TValue)value);
 
 
                 Rect changeValueRect = new Rect(new Vector2(buttonRect.x - 2f, valueRect.position.y), new Vector2(kButtonWidth, valueRect.size.y));
@@ -327,7 +327,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
     }
     */
 
-        private TV ChangeValueType(Rect rect, TK key, TV value)
+        private TValue ChangeValueType(Rect rect, TKey key, TValue value)
         {
             GUIContent content = EditorGUIUtility.IconContent("_Popup");
             content.tooltip = "Change Value Type";
@@ -337,33 +337,33 @@ namespace sim2kid.Package.SerializedDictionary.Editor
             if (GUI.Button(rect, content, changeItemStyle))
             {
                 GenericMenu genericMenu = new GenericMenu();
-                genericMenu.AddItem(new GUIContent("Numbers/int"), value is int, () => { _Dictionary[key] = (TV)(object)default(int); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Numbers/float"), value is float, () => { _Dictionary[key] = (TV)(object)default(float); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Numbers/double"), value is double, () => { _Dictionary[key] = (TV)(object)default(double); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Numbers/long"), value is long, () => { _Dictionary[key] = (TV)(object)default(long); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Vectors/Vector2"), (value is Vector2 && !(value is Vector2Int)), () => { _Dictionary[key] = (TV)(object)default(Vector2); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Vectors/Vector3"), (value is Vector3 && !(value is Vector3Int)), () => { _Dictionary[key] = (TV)(object)default(Vector3); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Vectors/Vector4"), value is Vector4, () => { _Dictionary[key] = (TV)(object)default(Vector4); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Vectors/Vector2Int"), value is Vector2Int, () => { _Dictionary[key] = (TV)(object)default(Vector2Int); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Vectors/Vector3Int"), value is Vector3Int, () => { _Dictionary[key] = (TV)(object)default(Vector3Int); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Bounds/Bounds"), value is Bounds && value is not BoundsInt, () => { _Dictionary[key] = (TV)(object)default(Bounds); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Bounds/BoundsInt"), value is BoundsInt, () => { _Dictionary[key] = (TV)(object)default(BoundsInt); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Rects/Rect"), value is Rect && value is not RectInt, () => { _Dictionary[key] = (TV)(object)default(Rect); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Rects/RectInt"), value is RectInt, () => { _Dictionary[key] = (TV)(object)default(RectInt); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("string"), value is string, () => { _Dictionary[key] = (TV)(object)""; MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("bool"), value is bool, () => { _Dictionary[key] = (TV)(object)default(bool); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Color"), value is Color, () => { _Dictionary[key] = (TV)(object)default(Color); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("AnimationCurve"), value is AnimationCurve, () => { _Dictionary[key] = (TV)(object)(new AnimationCurve()); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Gradient"), value is Gradient, () => { _Dictionary[key] = (TV)(object)(new Gradient()); MarkDirty(); });
-                genericMenu.AddItem(new GUIContent("Unity Object"), value is Object, () => { _Dictionary[key] = (TV)(object)(new Object()); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Numbers/int"), value is int, () => { _Dictionary[key] = (TValue)(object)default(int); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Numbers/float"), value is float, () => { _Dictionary[key] = (TValue)(object)default(float); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Numbers/double"), value is double, () => { _Dictionary[key] = (TValue)(object)default(double); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Numbers/long"), value is long, () => { _Dictionary[key] = (TValue)(object)default(long); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Vectors/Vector2"), (value is Vector2 && !(value is Vector2Int)), () => { _Dictionary[key] = (TValue)(object)default(Vector2); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Vectors/Vector3"), (value is Vector3 && !(value is Vector3Int)), () => { _Dictionary[key] = (TValue)(object)default(Vector3); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Vectors/Vector4"), value is Vector4, () => { _Dictionary[key] = (TValue)(object)default(Vector4); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Vectors/Vector2Int"), value is Vector2Int, () => { _Dictionary[key] = (TValue)(object)default(Vector2Int); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Vectors/Vector3Int"), value is Vector3Int, () => { _Dictionary[key] = (TValue)(object)default(Vector3Int); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Bounds/Bounds"), value is Bounds && value is not BoundsInt, () => { _Dictionary[key] = (TValue)(object)default(Bounds); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Bounds/BoundsInt"), value is BoundsInt, () => { _Dictionary[key] = (TValue)(object)default(BoundsInt); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Rects/Rect"), value is Rect && value is not RectInt, () => { _Dictionary[key] = (TValue)(object)default(Rect); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Rects/RectInt"), value is RectInt, () => { _Dictionary[key] = (TValue)(object)default(RectInt); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("string"), value is string, () => { _Dictionary[key] = (TValue)(object)""; MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("bool"), value is bool, () => { _Dictionary[key] = (TValue)(object)default(bool); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Color"), value is Color, () => { _Dictionary[key] = (TValue)(object)default(Color); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("AnimationCurve"), value is AnimationCurve, () => { _Dictionary[key] = (TValue)(object)(new AnimationCurve()); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Gradient"), value is Gradient, () => { _Dictionary[key] = (TValue)(object)(new Gradient()); MarkDirty(); });
+                genericMenu.AddItem(new GUIContent("Unity Object"), value is Object, () => { _Dictionary[key] = (TValue)(object)(new Object()); MarkDirty(); });
                 genericMenu.ShowAsContext();
             }
 
-            return (TV)value;
+            return (TValue)value;
         }
         #endregion
 
-        private void RemoveItem(TK key)
+        private void RemoveItem(TKey key)
         {
             _Dictionary.Remove(key);
             MarkDirty();
@@ -375,10 +375,10 @@ namespace sim2kid.Package.SerializedDictionary.Editor
             if (_Dictionary == null)
             {
                 SetupStyles();
-                _Dictionary = fieldInfo.GetValue(targetObject) as Dictionary<TK, TV>;
+                _Dictionary = fieldInfo.GetValue(targetObject) as Dictionary<TKey, TValue>;
                 if (_Dictionary == null)
                 {
-                    _Dictionary = new Dictionary<TK, TV>();
+                    _Dictionary = new Dictionary<TKey, TValue>();
                     fieldInfo.SetValue(targetObject, _Dictionary);
                 }
 
@@ -438,14 +438,14 @@ namespace sim2kid.Package.SerializedDictionary.Editor
 
         private void AddNewItem()
         {
-            TK key;
-            if (typeof(TK) == typeof(string))
-                key = (TK)(object)"";
-            else key = default(TK);
+            TKey key;
+            if (typeof(TKey) == typeof(string))
+                key = (TKey)(object)"";
+            else key = default(TKey);
 
-            if (typeof(TV) == typeof(object))
+            if (typeof(TValue) == typeof(object))
             {
-                var value = (TV)(object)1;
+                var value = (TValue)(object)1;
                 try
                 {
                     _Dictionary.Add(key, value);
@@ -458,7 +458,7 @@ namespace sim2kid.Package.SerializedDictionary.Editor
             }
             else
             {
-                var value = default(TV);
+                var value = default(TValue);
                 try
                 {
                     _Dictionary.Add(key, value);
