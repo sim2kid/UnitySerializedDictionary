@@ -456,7 +456,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackboard:
-    saveItems: []
+    saveItems:
+    - key: key2
+      value: (string)str
+      index: 0
     sceneObjectSaveItems: []
 --- !u!4 &1519319791
 Transform:
